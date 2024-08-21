@@ -39,4 +39,19 @@ public class ItemModel {
         return itemDtos;
     }
     
+    public String save(ItemDto dto) throws SQLException, ClassNotFoundException{
+        Connection connection = DBConnection.getInstance().getConnection();
+        String sql = "INSERT INTO Item VALUES (?,?,?,?,?)";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setString(1, dto.getItemCode());
+        statement.setString(2, dto.getDescription());
+        statement.setString(3, dto.getPackSize());
+        statement.setDouble(4, dto.getUnitPrice());
+        statement.setInt(5, dto.getQoh());
+        
+        int resp = statement.executeUpdate();
+        return resp > 0 ? "Success" : "Fail";
+        
+    }
+    
 }
