@@ -31,7 +31,7 @@ public class ItemController {
         return resp;
     }
     
-    public ItemDto searchItem(String itemCode){
+    public ItemDto searchItem(String itemCode) throws SQLException, ClassNotFoundException{
         ItemDto dto = ITEM_MODEL.getItem(itemCode);
         return dto;
     }

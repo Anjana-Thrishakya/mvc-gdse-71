@@ -15,7 +15,7 @@ import javax.swing.table.DefaultTableModel;
  * @author anjan
  */
 public class ItemView extends javax.swing.JFrame {
-    
+
     private final ItemController ITEM_CONTROLLER;
 
     /**
@@ -25,7 +25,7 @@ public class ItemView extends javax.swing.JFrame {
         ITEM_CONTROLLER = new ItemController();
         initComponents();
         loadTable();
-        
+
     }
 
     /**
@@ -227,30 +227,30 @@ public class ItemView extends javax.swing.JFrame {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
-            
+
         };
-        
+
         try {
             ArrayList<ItemDto> itemDtos = ITEM_CONTROLLER.getAllItems();
             for (ItemDto itemDto : itemDtos) {
                 Object[] rowData = {itemDto.getItemCode(), itemDto.getDescription(), itemDto.getPackSize(), itemDto.getUnitPrice(), itemDto.getQoh()};
                 dtm.addRow(rowData);
-            }   
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
-        
+
         tblItem.setModel(dtm);
     }
-    
-    private void saveItem(){
+
+    private void saveItem() {
         ItemDto itemDto = new ItemDto(
                 txtCode.getText(),
-                txtDesc.getText(), 
-                txtPack.getText(), 
+                txtDesc.getText(),
+                txtPack.getText(),
                 Double.parseDouble(txtUnitPrice.getText()),
                 Integer.parseInt(txtQoh.getText()));
-        
+
         try {
             String resp = ITEM_CONTROLLER.saveItem(itemDto);
             JOptionPane.showMessageDialog(this, resp);
@@ -260,20 +260,34 @@ public class ItemView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }
-    
-    private void clearForm(){
+
+    private void clearForm() {
         txtCode.setText("");
         txtDesc.setText("");
         txtPack.setText("");
         txtQoh.setText("");
         txtUnitPrice.setText("");
     }
-    
-    private void searchItem(){
+
+    private void searchItem() {
         String itemCode = (String) tblItem.getValueAt(tblItem.getSelectedRow(), 0);
         System.out.println(itemCode);
-        
-        ItemDto itemDto = ITEM_CONTROLLER.searchItem(itemCode);
-        
+
+        try {
+
+            ItemDto itemDto = ITEM_CONTROLLER.searchItem(itemCode);
+            if (itemDto != null) {
+                txtCode.setText(itemDto.getItemCode());
+                txtDesc.setText(itemDto.getDescription());
+                txtPack.setText(itemDto.getPackSize());
+                txtQoh.setText(Integer.toString(itemDto.getQoh()));
+                txtUnitPrice.setText(Double.toString(itemDto.getUnitPrice()));
+            } else {
+                JOptionPane.showMessageDialog(this, "Item Not Found");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
     }
 }
