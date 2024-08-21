@@ -245,8 +245,18 @@ public class ItemView extends javax.swing.JFrame {
         try {
             String resp = ITEM_CONTROLLER.saveItem(itemDto);
             JOptionPane.showMessageDialog(this, resp);
+            loadTable();
+            clearForm();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
+    }
+    
+    private void clearForm(){
+        txtCode.setText("");
+        txtDesc.setText("");
+        txtPack.setText("");
+        txtQoh.setText("");
+        txtUnitPrice.setText("");
     }
 }
