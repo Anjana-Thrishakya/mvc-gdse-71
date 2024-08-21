@@ -4,6 +4,10 @@
  */
 package edu.ijse.mvc.view;
 
+import edu.ijse.mvc.controller.ItemController;
+import edu.ijse.mvc.dto.ItemDto;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -11,13 +15,17 @@ import javax.swing.table.DefaultTableModel;
  * @author anjan
  */
 public class ItemView extends javax.swing.JFrame {
+    
+    private final ItemController ITEM_CONTROLLER;
 
     /**
      * Creates new form ItemView
      */
     public ItemView() {
+        ITEM_CONTROLLER = new ItemController();
         initComponents();
         loadTable();
+        
     }
 
     /**
@@ -196,14 +204,24 @@ public class ItemView extends javax.swing.JFrame {
     private javax.swing.JTextField txtQoh;
     private javax.swing.JTextField txtUnitPrice;
     // End of variables declaration//GEN-END:variables
-    private void loadTable(){
+    private void loadTable() {
         String columns[] = {"Item Code", "Description", "Pack Size", "Unit Price", "Qty on Hand"};
-        DefaultTableModel dtm = new DefaultTableModel(columns, 0){
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
             
         };
+        
+        try {
+            ArrayList<ItemDto> itemDtos = ITEM_CONTROLLER.getAllItems();
+            for (ItemDto itemDto : itemDtos) {
+                Object[] rowData = {itemDto.getItemCode(), itemDto.getDescription(), itemDto.getPackSize(), itemDto.getUnitPrice(), itemDto.getQoh()};
+                dtm.addRow(rowData);
+            }   
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
         
         tblItem.setModel(dtm);
     }
