@@ -31,4 +31,9 @@ public class ItemController {
         return resp;
     }
     
+    public ItemDto searchItem(String itemCode){
+        ItemDto dto = ITEM_MODEL.getItem(itemCode);
+        return dto;
+    }
+    
 }

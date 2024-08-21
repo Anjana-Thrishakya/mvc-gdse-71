@@ -54,4 +54,8 @@ public class ItemModel {
         
     }
     
+    public ItemDto getItem(String itemCode){
+        return null;
+    }
+    
 }
