@@ -8,6 +8,8 @@ import edu.ijse.mvc.controller.CustomerController;
 import edu.ijse.mvc.controller.ItemController;
 import edu.ijse.mvc.dto.CustomerDto;
 import edu.ijse.mvc.dto.ItemDto;
+import edu.ijse.mvc.dto.OrderDetailDto;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -19,6 +21,8 @@ public class OrderView extends javax.swing.JFrame {
     
     private ItemController itemController = new ItemController();
     private CustomerController customerController = new CustomerController();
+    
+    private ArrayList<OrderDetailDto> orderDetailDtos = new ArrayList<>();
     /**
      * Creates new form OrderView
      */
@@ -110,6 +114,11 @@ public class OrderView extends javax.swing.JFrame {
 
         btnAddToTable.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnAddToTable.setText("Add to Cart");
+        btnAddToTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddToTableActionPerformed(evt);
+            }
+        });
 
         tblCart.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -219,6 +228,10 @@ public class OrderView extends javax.swing.JFrame {
         searchItem();
     }//GEN-LAST:event_btnItemSearchActionPerformed
 
+    private void btnAddToTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToTableActionPerformed
+        addToCart();
+    }//GEN-LAST:event_btnAddToTableActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -280,5 +293,30 @@ public class OrderView extends javax.swing.JFrame {
             }
         };
         tblCart.setModel(dtm);
+    }
+    
+    private void addToCart(){
+        try {
+            OrderDetailDto dto = new OrderDetailDto();
+            dto.setItemCode(txtItemId.getText());
+            dto.setQty(Integer.parseInt(txtQty.getText()));
+            dto.setDiscount(Double.parseDouble(txtDiscount.getText()));
+            
+            orderDetailDtos.add(dto);
+            Object [] rowData = {dto.getItemCode(), dto.getDiscount(), dto.getQty()};
+            DefaultTableModel dtm = (DefaultTableModel) tblCart.getModel();
+            dtm.addRow(rowData);
+            clearItem();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
+    private void clearItem(){
+        txtItemId.setText("");
+        txtDiscount.setText("");
+        txtQty.setText("");
+        lblItemData.setText("");
     }
 }
