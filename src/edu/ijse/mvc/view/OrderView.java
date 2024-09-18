@@ -9,6 +9,7 @@ import edu.ijse.mvc.controller.ItemController;
 import edu.ijse.mvc.dto.CustomerDto;
 import edu.ijse.mvc.dto.ItemDto;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,6 +24,7 @@ public class OrderView extends javax.swing.JFrame {
      */
     public OrderView() {
         initComponents();
+        loadTable();
     }
 
     /**
@@ -268,5 +270,15 @@ public class OrderView extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
+    }
+
+    private void loadTable() {
+        String columns [] = {"Item Code", "Qty", "Discount"};
+        DefaultTableModel dtm = new DefaultTableModel(columns, 0){
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tblCart.setModel(dtm);
     }
 }
