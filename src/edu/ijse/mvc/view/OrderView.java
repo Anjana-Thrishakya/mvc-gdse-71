@@ -4,12 +4,19 @@
  */
 package edu.ijse.mvc.view;
 
+import edu.ijse.mvc.controller.CustomerController;
+import edu.ijse.mvc.controller.ItemController;
+import edu.ijse.mvc.dto.CustomerDto;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author anjan
  */
 public class OrderView extends javax.swing.JFrame {
-
+    
+    private ItemController itemController = new ItemController();
+    private CustomerController customerController = new CustomerController();
     /**
      * Creates new form OrderView
      */
@@ -64,6 +71,11 @@ public class OrderView extends javax.swing.JFrame {
 
         btnCustSearch.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnCustSearch.setText("Search");
+        btnCustSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCustSearchActionPerformed(evt);
+            }
+        });
 
         lblCustData.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
 
@@ -191,40 +203,11 @@ public class OrderView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(OrderView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(OrderView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(OrderView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(OrderView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnCustSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustSearchActionPerformed
+        searchCustomer();
+    }//GEN-LAST:event_btnCustSearchActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new OrderView().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddToTable;
@@ -247,4 +230,18 @@ public class OrderView extends javax.swing.JFrame {
     private javax.swing.JTextField txtOrder;
     private javax.swing.JTextField txtQty;
     // End of variables declaration//GEN-END:variables
+    public void searchCustomer(){
+        String customerId = txtCustId.getText();
+        try {
+            CustomerDto customerDto = customerController.searchCustomer(customerId);
+            if(customerDto != null){
+                lblCustData.setText(customerDto.getTitle() + ". " + customerDto.getName());
+            } else {
+                JOptionPane.showMessageDialog(this, "Customer not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
 }
