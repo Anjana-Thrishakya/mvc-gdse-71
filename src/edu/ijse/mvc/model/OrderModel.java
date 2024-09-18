@@ -46,6 +46,25 @@ public class OrderModel {
                 }
                 
                 if(isOrderDetailSaved){
+                    boolean isItemUpdated = true;
+                    for (OrderDetailDto orderDetailDto : orderDto.getOrderDetailDtos()) {
+                        String itemUpdateSql = "UPDATE item SET QtyOnHand = QtyOnHand - ? WHERE ItemCode = ?";
+                        PreparedStatement itemStatement = connection.prepareStatement(itemUpdateSql);
+                        itemStatement.setInt(1, orderDetailDto.getQty());
+                        itemStatement.setString(2, orderDetailDto.getItemCode());
+                    
+                        if(!(itemStatement.executeUpdate()>0)){
+                            isItemUpdated = false;
+                        }
+                    }
+                    
+                    if(isItemUpdated){
+                        connection.commit();
+                        return "Saved";
+                    } else {
+                        connection.rollback();
+                        return "Item update Error";
+                    }
                     
                 } else {
                     connection.rollback();
