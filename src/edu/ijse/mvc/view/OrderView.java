@@ -9,7 +9,10 @@ import edu.ijse.mvc.controller.ItemController;
 import edu.ijse.mvc.dto.CustomerDto;
 import edu.ijse.mvc.dto.ItemDto;
 import edu.ijse.mvc.dto.OrderDetailDto;
+import edu.ijse.mvc.dto.OrderDto;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -135,6 +138,11 @@ public class OrderView extends javax.swing.JFrame {
 
         btnPlaceOrder.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnPlaceOrder.setText("Place Order");
+        btnPlaceOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlaceOrderActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -232,6 +240,10 @@ public class OrderView extends javax.swing.JFrame {
         addToCart();
     }//GEN-LAST:event_btnAddToTableActionPerformed
 
+    private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
+        placeOrder();
+    }//GEN-LAST:event_btnPlaceOrderActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -303,7 +315,7 @@ public class OrderView extends javax.swing.JFrame {
             dto.setDiscount(Double.parseDouble(txtDiscount.getText()));
             
             orderDetailDtos.add(dto);
-            Object [] rowData = {dto.getItemCode(), dto.getDiscount(), dto.getQty()};
+            Object [] rowData = {dto.getItemCode(), dto.getQty(), dto.getDiscount() };
             DefaultTableModel dtm = (DefaultTableModel) tblCart.getModel();
             dtm.addRow(rowData);
             clearItem();
@@ -318,5 +330,25 @@ public class OrderView extends javax.swing.JFrame {
         txtDiscount.setText("");
         txtQty.setText("");
         lblItemData.setText("");
+    }
+
+    private void placeOrder() {
+        try {
+            OrderDto orderDto = new OrderDto();
+            orderDto.setOrderId(txtOrder.getText());
+            orderDto.setCustId(txtCustId.getText());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String date = sdf.format(new Date());
+            orderDto.setOrderDate(date);
+            orderDto.setOrderDetailDtos(orderDetailDtos);
+            
+            System.out.println(orderDto.toString());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showConfirmDialog(this, e.getMessage());
+        }
+        
+        
     }
 }
