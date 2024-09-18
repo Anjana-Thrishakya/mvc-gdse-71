@@ -7,6 +7,7 @@ package edu.ijse.mvc.view;
 import edu.ijse.mvc.controller.CustomerController;
 import edu.ijse.mvc.controller.ItemController;
 import edu.ijse.mvc.dto.CustomerDto;
+import edu.ijse.mvc.dto.ItemDto;
 import javax.swing.JOptionPane;
 
 /**
@@ -86,6 +87,11 @@ public class OrderView extends javax.swing.JFrame {
 
         btnItemSearch.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         btnItemSearch.setText("Search");
+        btnItemSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnItemSearchActionPerformed(evt);
+            }
+        });
 
         lblItemData.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
 
@@ -207,6 +213,10 @@ public class OrderView extends javax.swing.JFrame {
         searchCustomer();
     }//GEN-LAST:event_btnCustSearchActionPerformed
 
+    private void btnItemSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnItemSearchActionPerformed
+        searchItem();
+    }//GEN-LAST:event_btnItemSearchActionPerformed
+
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -238,6 +248,21 @@ public class OrderView extends javax.swing.JFrame {
                 lblCustData.setText(customerDto.getTitle() + ". " + customerDto.getName());
             } else {
                 JOptionPane.showMessageDialog(this, "Customer not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+    }
+    
+    public void searchItem(){
+        String itemCode = txtItemId.getText();
+        try {
+            ItemDto itemDto = itemController.searchItem(itemCode);
+            if(itemDto != null){
+                lblItemData.setText(itemDto.getDescription() + " | " + itemDto.getPackSize() + " | " + itemDto.getQoh() + " | " + itemDto.getUnitPrice());
+            } else {
+                JOptionPane.showMessageDialog(this, "Item not found");
             }
         } catch (Exception e) {
             e.printStackTrace();

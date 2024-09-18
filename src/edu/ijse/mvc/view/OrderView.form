@@ -196,6 +196,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Search"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnItemSearchActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblItemData">
       <Properties>
